@@ -1,19 +1,8 @@
 import importlib
 import sys
-import yaml
 import re
 import inspect
-
-
-with open(sys.argv[1]) as f:
-    config = yaml.safe_load(f.read())
-
-module = importlib.import_module(config['module'])
-includes, excludes = [], []
-if 'includes' in config:
-    includes = [re.compile(i) for i in config['includes']]
-if 'excludes' in config:
-    excludes = [re.compile(e) for e in config['excludes']]
+import json
 
 
 def rep(name, item):
@@ -50,11 +39,28 @@ def recurse(name, value, prefix=''):
     return items
 
 
-lines = recurse(module.__name__, module)
+def pydocless(config):
+    global includes
+    global excludes
+    module = importlib.import_module(config['module'])
+    includes, excludes = [], []
+    if 'includes' in config:
+        includes = [re.compile(i) for i in config['includes']]
+    if 'excludes' in config:
+        excludes = [re.compile(e) for e in config['excludes']]
+    lines = recurse(module.__name__, module)
+    seen = set()
+    lines = [x for x in lines if not (x.strip() in seen or seen.add(x.strip()))]
+    lines.insert(0, '# ' + module.__name__)
 
-seen = set()
-lines = [x for x in lines if not (x.strip() in seen or seen.add(x.strip()))]
-lines.insert(0, '# ' + module.__name__)
+    return '\n'.join(lines)
 
-print('\n'.join(lines))
+
+if __name__ == '__main__':
+    with open(sys.argv[1]) as f:
+        print(pydocless(json.loads(f.read())))
+
+
+
+
 
