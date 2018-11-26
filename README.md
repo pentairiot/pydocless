@@ -21,7 +21,7 @@ The config object should be a dictionary:
 {
     "module": "module_name",    # Module should be available within the python environment
     "includes": [],             # List of regexes for what to include. By default nothing is included
-    "excludes": []              # List of regexes for what to exclude. By default everything is excluded
+    "excludes": []              # List of regexes for what to exclude. By default nothing is excluded
 }
 ```
 
