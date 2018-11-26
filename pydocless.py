@@ -1,8 +1,6 @@
 import importlib
-import sys
 import re
 import inspect
-import json
 
 
 def rep(name, item):
@@ -54,13 +52,3 @@ def pydocless(config):
     lines.insert(0, '# ' + module.__name__)
 
     return '\n'.join(lines)
-
-
-if __name__ == '__main__':
-    with open(sys.argv[1]) as f:
-        print(pydocless(json.loads(f.read())))
-
-
-
-
-

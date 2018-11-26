@@ -13,6 +13,7 @@ setup(
     long_description_content_type='text/markdown',
     url='https://github.com/pentairiot/pydocless',
     packages=["."],
+    scripts=["pydocless"],
     install_requires=[],
     classifiers=(
         "Programming Language :: Python :: 3",
